@@ -10,28 +10,30 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-#handle /getpods command
-async def get_pods(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    pods = os.popen("kubectl get pod -n unified").read()
-    await update.message.reply_text(pods)
-
-#handle /getpods message
+#handle message
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("On Check")
+    
     if update.message.text == "/getpods":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=get_pods
         )
 
+#handle /getpods command
+async def get_pods(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    pods = os.popen("kubectl get pod -n unified").read()
+    await update.message.reply_text(pods)
+
 def main():
     application = ApplicationBuilder().token(bot_token).build()
     
-    get_pods_handler = CommandHandler('getpods', get_pods)
     message_handler = MessageHandler(filters.Text, handle_message)
+    get_pods_handler = CommandHandler('getpods', get_pods)
 
     application.add_handler(get_pods_handler)
     application.add_handler(message_handler)
-    
+
     application.run_polling()
 
 if __name__ == '__main__':
