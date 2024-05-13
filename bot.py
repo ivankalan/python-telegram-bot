@@ -2,8 +2,11 @@ import os
 import logging
 from telegram import Update, ReplyParameters
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from dotenv import load_dotenv
 
-bot_token = os.environ.get('bot_token')
+load_dotenv()
+
+bot_token = os.getenv('bot_token')
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
